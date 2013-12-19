@@ -1,0 +1,114 @@
+@font-face {
+    font-family: 'aller';
+    src: url('fonts/aller-light.eot');
+    src: url('fonts/aller-light.eot?#iefix') format('embedded-opentype'),
+         url('fonts/aller-light.woff') format('woff'),
+         url('fonts/aller-light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'aller';
+    src: url('fonts/aller-bold.eot');
+    src: url('fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
+         url('fonts/aller-bold.woff') format('woff'),
+         url('fonts/aller-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'novecento';
+    src: url('fonts/novecento-bold.eot');
+    src: url('fonts/novecento-bold.eot?#iefix') format('embedded-opentype'),
+         url('fonts/novecento-bold.woff') format('woff'),
+         url('fonts/novecento-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+  font-family: 'aller';
+}
+a {
+  color: #000;
+}
+a:hover {
+  color: #f03;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  margin: 0;
+}
+h1 {
+  font-family: 'novecento';
+}
+h2 {
+  font-size: 1.3em;
+  font-weight: normal;
+  margin-top: 2em;
+  white-space: nowrap;
+}
+h3 {
+  font-size: 1em;
+  letter-spacing: -0.5px;
+  margin: 1em 0;
+}
+p {
+  margin: 1em 0;
+}
+pre, table, table p {
+  margin: 0;
+}
+pre {
+  font-size: 0.9em;
+}
+
+.container {
+  width: 640px;
+  margin: 0 auto;
+  padding: 2em 0 4em 0;
+}
+.toc ol,
+.toc ul {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  letter-spacing: 0.1px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 1.7em 0 0 1.6em;
+}
+table.params {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  margin-left: 0.1em;
+}
+table.params th,
+table.params td {
+  border-left: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+table.params th:first-child,
+table.params td:first-child {
+  border-left: 0;
+}
+table.params th {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+}
+table.params td.name {
+  font-weight: bold;
+}
+table.params tr:nth-child(2n-1) td {
+  background: #f9f9f9;
+}
+div.highlight {
+  margin-top: 0.2em;
+}

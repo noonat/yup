@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>{{ doc.name|e }}</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/normalize.css"/>
+  <link rel="stylesheet" href="css/docs.css"/>
+  <link rel="stylesheet" href="css/github.css"/>
+</head>
+
+<body>
+  <div class="container">
+    <h1>{{ doc.name|e }} API</h1>
+    {{ doc.description|md }}
+    <div class="toc">
+      <ol>
+      {% for request in doc.requests %}
+        <li class="{{ request.slug }}"><a href="#{{ request.slug }}">{{ request.request|e }}</a></li>
+      {% endfor %}
+      </ol>
+    </div>
+    <div class="requests">
+      {% for request in doc.requests %}
+        <h2 id="{{ request.slug }}">{{ request.request|e }}</h2>
+        {% if request.description %}
+          {{ request.description|md }}
+        {% endif %}
+        {% if request.params %}
+          <h3>Parameters</h3>
+          <table class="params">
+            <thead>
+              <tr>
+                <th class="name">Name</th>
+                <th class="type">Type</th>
+                <th class="required">Required</th>
+                <th class="description">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for param in request.params %}
+                <tr>
+                  <td class="name">{{ param.name|e }}</td>
+                  <td class="type">{{ param.type|e }}</td>
+                  <td class="required">{% if param.required %}yes{% endif %}</td>
+                  <td class="description">{{ param.description|md }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+        {% if request.example %}
+          <h3>Example</h3>
+          {{ request.example.curl|hl('bash') }}
+          {{ request.example.response|hl('json') }}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</body>
+
+</html>
