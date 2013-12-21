@@ -149,7 +149,7 @@ class RequestExample(object):
                 args.append("-F '{0}={1}'".format(key, value))
         url = self._requester.join(self.path)
         if self.query and self.method == 'GET':
-            url += "?" + urllib.urlencode(self.query)
+            url = "'" + url + "?" + urllib.urlencode(self.query) + "'"
         args.append(url)
         return args
 
