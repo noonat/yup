@@ -112,3 +112,12 @@ table.params tr:nth-child(2n-1) td {
 div.highlight {
   margin-top: 0.2em;
 }
+p.params {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  margin: 0.5em 0;
+}
+p.params b {
+  font-family: 'aller';
+  font-size: 1em;
+}
