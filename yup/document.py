@@ -11,6 +11,8 @@ import yaml
 
 
 logger = logging.getLogger(__name__)
+non_word_re = re.compile(r'\W+')
+underscores_re = re.compile(r'^_*|_*$')
 
 
 class Requester(object):
@@ -27,12 +29,14 @@ class Requester(object):
 class Document(object):
     """The container for documentation parsed from a YAML file."""
 
-    def __init__(self, requester, slug, data):
+    def __init__(self, requester, slug, data, input_dir):
         self.slug = slug
         self.name = ' '.join([s.title() for s in slug.split('_')])
         self.description = data.get('description', '').strip()
         self.requests = [Request(requester, request)
                          for request in data['requests']]
+        self.sections = [Section(section, input_dir)
+                         for section in data.get('sections', ())]
 
 
 class Request(object):
@@ -42,12 +46,12 @@ class Request(object):
     and an optional example of the request.
     """
 
-    non_word_re = re.compile(r'\W+')
     request_re = re.compile(r'^(GET|POST|PUT|DELETE) (.+)$')
-    underscores_re = re.compile(r'^_*|_*$')
 
     def __init__(self, requester, data):
         self.request = data['request']
+
+        # Parse the request into <method> <path> attributes.
         matches = self.request_re.match(self.request)
         if not matches:
             raise Exception(('error: "{request}" must be in the format '
@@ -55,7 +59,26 @@ class Request(object):
         self.method = matches.group(1)
         self.path = matches.group(2)
 
+        # The long description is used on the request.
         self.description = data.get('description', '').strip()
+
+        # The short description is used for the table of contents.
+        # If an explicit short description isn't defined, make one by
+        # grabbing everything up to the first blank line of the description.
+        if 'short_description' in data:
+            self.short_description = data['short_description']
+        else:
+            self.short_description = []
+            for line in self.description.split("\n"):
+                if line.strip() == "":
+                    break
+                self.short_description.append(line)
+            self.short_description = "\n".join(self.short_description)
+
+        # Parse the params dict into a dict of RequestParam objects.
+        # Note that the _ key is treated as a special case. Its keys are
+        # used as default values for the params dict, if the keys are not
+        # overridden by the params dict.
         if 'params' in data:
             if '_' in data['params']:
                 params = data['params']['_'].copy()
@@ -67,6 +90,8 @@ class Request(object):
             self.params = sorted(self.params, key=lambda r: (not r.required, r.name))
         else:
             self.params = []
+
+        # Parse the example dict into a RequestExample object.
         if 'example' in data:
             self.example = RequestExample(requester, self.method, self.path,
                                           data['example'])
@@ -75,9 +100,8 @@ class Request(object):
 
     @property
     def slug(self):
-        slug = self.non_word_re.sub('_', self.request)
-        slug = self.underscores_re.sub('', slug)
-        return slug.lower()
+        """Return a version of the request that can be used for anchors."""
+        return slug(self.request)
 
 
 class RequestParam(object):
@@ -154,6 +178,21 @@ class RequestExample(object):
         return args
 
 
+class Section(object):
+    """An individual section in the documentation.
+
+    Sections are a way to include external Markdown files in a given page
+    of the documentation.
+    """
+
+    def __init__(self, data, input_dir):
+        self.name = data['section']
+        self.filename = data['file']
+        self.slug = slug(os.path.splitext(os.path.basename(self.filename))[0])
+        with open(os.path.join(input_dir, self.filename), 'r') as f:
+            self.content = f.read()
+
+
 def iter_all(input_dir, base_url, requester_cls=None):
     """Return an iterator of Document objects for YAML files in a directory."""
     if requester_cls is None:
@@ -168,9 +207,15 @@ def iter_all(input_dir, base_url, requester_cls=None):
         with open(yaml_filename, 'r') as yaml_file:
             data = yaml.load(yaml_file)
         name = os.path.splitext(os.path.basename(yaml_filename))[0]
-        yield Document(requester, name, data)
+        yield Document(requester, name, data, input_dir)
 
 
 def load_all(input_dir, base_url, requester_cls=None):
     """Return a list of Document objects for YAML files in a directory."""
     return list(iter_all(input_dir, base_url, requester_cls))
+
+
+def slug(text):
+    slug = non_word_re.sub('_', text)
+    slug = underscores_re.sub('', slug)
+    return slug.lower()

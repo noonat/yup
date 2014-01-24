@@ -71,6 +71,7 @@ pre {
   margin: 0 auto;
   padding: 2em 0 4em 0;
 }
+
 .toc ol,
 .toc ul {
   font-family: Helvetica, Arial, sans-serif;
@@ -80,38 +81,47 @@ pre {
   margin: 0;
   padding: 1.7em 0 0 1.6em;
 }
-table.params {
+.toc li p {
+  margin: 0 0 0 1em;
+}
+.toc li p.link {
+  margin: 0.2em 0 0 0;
+}
+
+.markdown table {
   border-collapse: collapse;
   font-size: 0.9em;
   margin-left: 0.1em;
 }
-table.params th,
-table.params td {
+.markdown table th,
+.markdown table td {
   border-left: 1px solid #ccc;
   padding: 10px;
   text-align: left;
   vertical-align: top;
 }
-table.params th:first-child,
-table.params td:first-child {
+.markdown table th:first-child,
+.markdown table td:first-child {
   border-left: 0;
 }
-table.params th {
+.markdown table th {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 0.75em;
   font-weight: bold;
   padding-bottom: 5px;
   text-transform: uppercase;
 }
-table.params td.name {
+.markdown table td.name {
   font-weight: bold;
 }
-table.params tr:nth-child(2n-1) td {
+.markdown table tr:nth-child(2n-1) td {
   background: #f9f9f9;
 }
+
 div.highlight {
   margin-top: 0.2em;
 }
+
 p.params {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 0.9em;

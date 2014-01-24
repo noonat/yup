@@ -12,15 +12,24 @@
 <body>
   <div class="container">
     <h1>{{ doc.name|e }} API</h1>
-    {{ doc.description|md }}
+    <div class="markdown">{{ doc.description|md }}</div>
     <div class="toc">
       <ol>
+      {% for section in doc.sections %}
+        <li class="{{ section.slug }}"><p class="link"><a href="#{{ section.slug }}">{{ section.name }}</a></p></li>
+      {% endfor %}
       {% for request in doc.requests %}
-        <li class="{{ request.slug }}"><a href="#{{ request.slug }}">{{ request.request|e }}</a></li>
+        <li class="{{ request.slug }}"><p class="link"><a href="#{{ request.slug }}">{{ request.request|e }}</a></p>{{ request.short_description|md }}</li>
       {% endfor %}
       </ol>
     </div>
-    <div class="requests">
+    <div class="sections markdown">
+      {% for section in doc.sections %}
+        <h2 id="{{ section.slug }}">{{ section.name|e }}</h2>
+        {{ section.content|md }}
+      {% endfor %}
+    </div>
+    <div class="requests markdown">
       {% for request in doc.requests %}
         <h2 id="{{ request.slug }}">{{ request.request|e }}</h2>
         {% if request.description %}
